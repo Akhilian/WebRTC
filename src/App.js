@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.scss';
 import Call from './Call';
 
 class App extends Component {
   render() {
     return (
-      <section class="section">
+      <section className="section">
       <div className="container">
-        <div class="columns">
-          <div class="column">
+        <div className="columns">
+          <div className="column">
             <Call playerName="Jjpaal" />
           </div>
-          <div class="column">
+          <div className="column">
             <Call playerName="Akhilian" />
           </div>
         </div>
