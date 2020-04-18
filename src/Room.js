@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import Call from './Call';
 
-class Home extends Component {
+class Room extends Component {
   render() {
     return (
       <section className="section">
         <div className="container">
           <div className="columns">
             <div className="column">
-              Salut
+              <Call playerName="Jjpaal" />
+            </div>
+            <div className="column">
+              <Call playerName="Jjpaal" />
             </div>
           </div>
         </div>
@@ -17,4 +20,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Room;
