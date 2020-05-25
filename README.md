@@ -1,3 +1,6 @@
+# WebRTC
+This application is made to work with https://github.com/Akhilian/webrtc-signaling-app
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
