@@ -8,16 +8,14 @@ class Eve extends Component {
     }
   
     async componentDidMount() {
-      console.log('Eve - componentDidMount')
+
       const peerConnection = new RTCPeerConnection()
       await peerConnection
         .setRemoteDescription(this.props.offerEvent.offer)
   
       peerConnection.createAnswer().then((answer) => {
-        console.log('answer', answer)
         peerConnection.setLocalDescription(answer)
   
-        console.log('Eve - signaling with answer')
         fetch('http://localhost:5000/signaling', {
           method: 'POST',
           body: JSON.stringify({

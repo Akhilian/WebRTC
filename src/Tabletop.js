@@ -1,54 +1,18 @@
 import React, { Component } from 'react';
-import MasterCamera from './MasterCamera';
-import { v4 as uuidv4 } from 'uuid';
-import Eve from './Eve';
+import Camera from './Camera';
 
-function didSomeoneTriedToConnectWithAnOffer(currentUser, events) {
-  const offers = events.filter((event) => event.from !== currentUser && event.offer)
-  return offers.length > 0
-}
-
-function didSomeoneSentAnAnswerToMe(currentUser, events) {
-  const answers = events.filter((event) => event.from !== currentUser && event.answer)
-  return answers.length > 0
-}
-
-function getAnswerEvent(currentUser, events) {
-  const answers = events.filter((event) => event.from !== currentUser && event.answer)
-  return answers[0]
-}
-
-function getOfferEvent(currentUser, events) {
-  const offers = events.filter((event) => event.from !== currentUser  && event.offer)
-
-  return offers[0]
-}
-
-const EventMessage = ({event}) => (
-  <article className="message is-dark" >
-    <div className="message-header">
-      {event.offer ? ('Offer') : ('Answer')}
-    </div>
-    <div className="message-body">
-      <p>Date: {JSON.stringify(event.dateEmitted)}</p>
-      <p>From: {JSON.stringify(event.from)}</p>
-      <p>To: {JSON.stringify(event.to)}</p>
-    </div>
-  </article>
-)
-
-class EventsStream extends Component {
-  render() {
-    const messages = [];
-    const events = this.props.events
-    for(let index in events) {
-      messages.push((
-        <EventMessage key={index} event={this.props.events[index]} />
-      ))
-    }
-
-    return <>{messages}</>
-  }
+function sendSignal(userId, payload) {
+  fetch('http://localhost:5000/signaling', {
+      method: 'POST',
+      body: JSON.stringify({
+        userId,
+        payload
+      }),
+      mode: 'cors',
+      headers: {
+          'content-Type': 'application/json'
+      },
+  })    
 }
 
 class Tabletop extends Component {
@@ -60,54 +24,98 @@ class Tabletop extends Component {
     super(props)
     this.state = {
       userId: params.name,
-      events: []
+      events: [],
+      streams: []
     }
   }
 
   componentDidMount() {
-    console.log('Initialize the stream')
-    const events = new EventSource(`http://localhost:5000/stream?uuid=${this.state.userId}`);
-    events.onmessage = (event) => {
-      const listOfEvents = this.state.events;
-      listOfEvents.push(JSON.parse(event.data))
-      this.setState({ events: listOfEvents })
+    const pc = new RTCPeerConnection()
+    pc.onicecandidate = ({candidate}) => {
+      sendSignal(this.state.userId, {
+        candidate
+      })
     };
+
+    pc.onnegotiationneeded = async () => {
+      await pc.setLocalDescription(await pc.createOffer());
+      sendSignal(this.state.userId, {desc: pc.localDescription});
+    };
+
+    pc.ontrack = (event) => {
+      const streams = this.state.streams;
+      streams.push(event.streams[0]);
+      
+      this.setState({ streams })
+    };
+
+
+    const events = new EventSource(`http://localhost:5000/stream?uuid=${this.state.userId}`);
+
+    events.onmessage = async (event) => {
+      const message = JSON.parse(event.data)
+      
+      if (message.userId !== this.state.userId) {
+        try {
+          const { desc, candidate } = message.payload;
+
+          if(desc) {
+            if(desc.type === 'offer') {
+              await pc.setRemoteDescription(desc);
+              await pc.setLocalDescription(await pc.createAnswer())
+              sendSignal(this.state.userId, {desc: pc.localDescription});
+            } else if (desc.type === 'answer') {
+              await pc.setRemoteDescription(desc);
+            }
+    
+          } else if (candidate) {
+            await pc.addIceCandidate(candidate);
+          }
+        } catch(err) {
+          console.error(err)
+        }
+      }
+    };
+
+
+    navigator.mediaDevices
+    .getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        this.setState({ localStream: stream })
+
+        stream.getTracks()
+          .forEach((track) => {
+            pc.addTrack(track, stream)
+          });
+    })
   }
 
   render() {
-    let events = this.state.events
+    const streamsVideos = []
 
-    const isSomeoneTriedToConnect = didSomeoneTriedToConnectWithAnOffer(
-      this.state.userId, this.state.events
-    )
+    if(this.state.localStream) {
+      streamsVideos.push(
+        (<div className="column is-one-third">
+          <Camera stream={this.state.localStream} />
+        </div>)
+      )
+  
+    }
 
-    const hasSomeoneAnswerd = didSomeoneSentAnAnswerToMe(
-      this.state.userId, this.state.events
-    )
-
-    let answer;
-    if(hasSomeoneAnswerd) {
-      answer = getAnswerEvent(this.state.userId, this.state.events)
+    for(let index in this.state.streams) {
+      streamsVideos.push(
+        (<div className="column is-half" key={index}>
+          <Camera stream={this.state.streams[index]} />
+        </div>)
+      )
     }
 
     return (
       <section className="hero is-fullheight">
         <section className="section tabletop">
-          <div className="columns">
-            <div className="side">
-              <MasterCamera userId={this.state.userId} answerEvent={answer}/>
-              <EventsStream events={events} userId={this.state.userId}/>
-            </div>
-
-            <div className="side">
-              {!isSomeoneTriedToConnect && (
-                <p>Waiting for someone to connect</p>
-              )}
-              {isSomeoneTriedToConnect && (
-                <Eve offerEvent={getOfferEvent(this.state.userId, this.state.events)} uuid={this.state.userId} />
-              )}
-            </div>
-          </div>        
+          <div className="columns is-multiline">
+            {streamsVideos}
+          </div>
         </section>
       </section>
     );
