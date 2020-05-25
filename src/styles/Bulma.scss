@@ -12,18 +12,9 @@ $beige-lighter: #eff0eb;
 
 // Update Bulma's global variables
 $family-sans-serif: 'Nunito', sans-serif;
-$grey-dark: $brown;
-$grey-light: $beige-light;
-$primary: $purple;
-$link: $pink;
-$widescreen-enabled: false;
-$fullhd-enabled: false;
 
 // Update some of Bulma's component variables
-$body-background-color: white;
-$control-border-width: 2px;
-$input-border-color: transparent;
-$input-shadow: none;
+$box-shadow: none;
 
 // Import only what you need from Bulma
 @import '../node_modules/bulma/bulma.sass';

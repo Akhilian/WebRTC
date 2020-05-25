@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import Call from './Call';
+import { Link } from 'react-router-dom';
 
-class Room extends Component {
+class Start extends Component {
   render() {
     return (
       <section className="section">
         <div className="container">
           <div className="columns">
-            <div className="column">
-              <Call playerName="Jjpaal" />
-            </div>
-            <div className="column">
-              <Call playerName="Jjpaal" />
+            <div className="column box">
+              <Link to="/room">Rejoindre la partie</Link>
             </div>
           </div>
         </div>
@@ -20,4 +17,4 @@ class Room extends Component {
   }
 }
 
-export default Room;
+export default Start;

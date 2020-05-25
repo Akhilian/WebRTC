@@ -1,0 +1,24 @@
+@import "./Bulma.scss";
+
+.tabletop {
+    @extend .hero;
+    @extend .is-fullheight;
+
+    background-image: url('/background.jpg');
+    background-size: cover;
+    color: white;
+}
+
+.side {
+    @extend .column;
+    @extend .is-6;
+    @extend .panel;
+    @extend .is-paddingless;
+
+     background-color: white;
+     color: grey;
+}
+
+.mc-main {
+    border-radius: $radius;
+}

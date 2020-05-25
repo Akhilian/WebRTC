@@ -13,6 +13,26 @@ class Call extends Component {
             .then(stream => {
                 this.video.srcObject = stream;
             })
+
+        const peerConnection = new RTCPeerConnection()
+        peerConnection.createOffer().then(offer => {
+            this.setState({ connectionDetails: JSON.stringify(offer) })
+
+            fetch('http://localhost:5000/join', {
+                    method: 'POST',
+                    body: JSON.stringify(offer),
+                    mode: 'cors',
+                    headers: {
+                        'content-Type': 'application/json'
+                    },
+                })    
+
+            return peerConnection.setLocalDescription(offer)
+        }).catch(console.error)
+    }
+
+    handleChange = (event) => {
+        this.setState({remoteConnection: JSON.parse(event.target.value)});  
     }
 
     render() {
@@ -38,11 +58,13 @@ class Call extends Component {
                     </div>
 
                     <div className="content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                        <a href="#">#css</a> <a href="#">#responsive</a>
-                        <br/>
-                        <time dateTime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                        <label htmlFor="details">Détails : </label>
+                        <textarea id="details" className="textarea" value={ this.state.connectionDetails }></textarea>
+                    </div>
+
+                    <div className="content">
+                        <label htmlFor="details">Remote connection : </label>
+                        <textarea id="details" className="textarea" onChange={this.handleChange}></textarea>
                     </div>
                 </div>
             </div>
