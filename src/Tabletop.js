@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Camera from './Camera';
+import { SIGNALING_SERVER_URL } from './config';
 
 function sendSignal(userId, payload) {
-  fetch('http://localhost:5000/signaling', {
+  fetch(`${SIGNALING_SERVER_URL}/signaling`, {
       method: 'POST',
       body: JSON.stringify({
         userId,
@@ -49,8 +50,7 @@ class Tabletop extends Component {
       this.setState({ streams })
     };
 
-
-    const events = new EventSource(`http://localhost:5000/stream?uuid=${this.state.userId}`);
+    const events = new EventSource(`${SIGNALING_SERVER_URL}/stream?uuid=${this.state.userId}`);
 
     events.onmessage = async (event) => {
       const message = JSON.parse(event.data)
