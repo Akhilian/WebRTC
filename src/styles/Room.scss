@@ -1,5 +1,11 @@
 @import "./Bulma.scss";
 
+.start {
+    @extend .hero;
+    @extend .is-fullheight;
+
+}
+
 .tabletop {
     @extend .hero;
     @extend .is-fullheight;

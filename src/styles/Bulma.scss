@@ -1,4 +1,5 @@
 @charset "utf-8";
+@import '../../node_modules/bulma/bulma.sass';
 
 // Import a Google Font
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
@@ -14,6 +15,7 @@ $beige-lighter: #eff0eb;
 $family-sans-serif: 'Nunito', sans-serif;
 
 // Update some of Bulma's component variables
+$body-background-color: var(--bg-color);
 
 // Import only what you need from Bulma
-@import '../node_modules/bulma/bulma.sass';
+@import '../../node_modules/bulma/bulma.sass';
