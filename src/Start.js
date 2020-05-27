@@ -1,20 +1,34 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-class Start extends Component {
-  render() {
-    return (
-      <section className="section">
-        <div className="container">
-          <div className="columns">
-            <div className="column box">
-              <Link to="/room">Rejoindre la partie</Link>
-            </div>
+function Start() {
+
+  const [name, setName] = useState('')
+
+  return (
+    <section className="section start">
+      <div className="box">
+        <div className="field">
+          {
+            name != '' ? (
+              <label className="label" htmlFor="name">You are very welcome {name} !</label>
+            ) : (<label className="label" htmlFor="name">What is your name ?</label>)
+          }
+          
+          <div className="control">
+            <input className="input" id="name" type="text" placeholder="ie. James" onChange={e => setName(e.target.value)} />
           </div>
         </div>
-      </section>
-    );
-  }
+        <div className="field is-grouped">
+          <div className="control">
+            <Link to={`/room/${name}`}>
+              <button className="button is-link">Submit</button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Start;
