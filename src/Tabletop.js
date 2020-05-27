@@ -54,6 +54,7 @@ class Tabletop extends Component {
 
     events.onmessage = async (event) => {
       const message = JSON.parse(event.data)
+      console.log(message)
       
       if (message.userId !== this.state.userId) {
         try {
