@@ -17,7 +17,7 @@ function Start() {
 
   return (
     <section className="section start">
-      <div className="box">
+      <form className="box" action={`/room/${name}`}>
         <div className="field">
           <div className="columns">
             <div className="column">
@@ -46,7 +46,7 @@ function Start() {
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </section>
   );
 }
