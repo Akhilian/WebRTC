@@ -30,8 +30,8 @@ function Start() {
             </div>
             <div className="column has-text-right">{
               (isServerOnline 
-                && (<span class="tag is-success">Serveur en ligne</span>))
-                || (<span class="tag is-warning">Serveur injoignable</span>)
+                && (<span className="tag is-success">Serveur en ligne</span>))
+                || (<span className="tag is-warning">Serveur injoignable</span>)
               }
             </div>
           </div>          

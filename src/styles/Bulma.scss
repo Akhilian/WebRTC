@@ -15,7 +15,7 @@ $beige-lighter: #eff0eb;
 $family-sans-serif: 'Nunito', sans-serif;
 
 // Update some of Bulma's component variables
-$body-background-color: var(--bg-color);
+$box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.2), 0 0px 0 1px rgba($scheme-invert, 0.02);
 
 // Import only what you need from Bulma
 @import '../../node_modules/bulma/bulma.sass';

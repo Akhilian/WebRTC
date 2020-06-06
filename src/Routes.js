@@ -9,8 +9,7 @@ class Routes extends Component {
     return (
         <Router>
                 <Switch>
-                    <Route path="/room/:name" component={Tabletop}>
-                    </Route>
+                    <Route path="/room/:name" component={Tabletop}/ >
                     <Route path="/">
                         <Start />
                     </Route>

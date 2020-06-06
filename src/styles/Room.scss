@@ -10,7 +10,6 @@
     @extend .hero;
     @extend .is-fullheight;
 
-    // background-image: url('/background.jpg');
     background-size: cover;
     color: white;
 }
@@ -25,6 +24,7 @@
      color: grey;
 }
 
-.mc-main {
-    border-radius: $radius;
+.pseudo {
+    @extend .has-text-weight-semibold;
+    @extend .has-text-dark;
 }
