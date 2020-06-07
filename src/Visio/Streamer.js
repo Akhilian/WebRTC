@@ -29,7 +29,7 @@ class Streamer extends Component {
         console.log('componentDidMount')
         try {
             const stream = await navigator.mediaDevices
-                .getUserMedia({ video: true, audio: false });
+                .getUserMedia({ video: true, audio: true });
 
             stream.getTracks()
                 .forEach(track => this.pc.addTrack(track, stream));
