@@ -47,7 +47,6 @@ class Receiver extends Component {
         } catch(e) {
             console.error('FAILED', candidate)
         }
-        
     }
 
     render() {

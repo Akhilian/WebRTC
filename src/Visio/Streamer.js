@@ -30,11 +30,9 @@ class Streamer extends Component {
         try {
             const stream = await navigator.mediaDevices
                 .getUserMedia({ video: true, audio: false });
-            this.video.srcObject = stream;
 
             stream.getTracks()
                 .forEach(track => this.pc.addTrack(track, stream));
-            console.log('Added local stream to Streamer')
 
             const desc = await this.pc.createOffer()
             await this.pc.setLocalDescription(desc);
@@ -47,16 +45,7 @@ class Streamer extends Component {
     }
 
     render() {
-        return (
-            <video
-                ref={video => {this.video = video}}
-                playsInline
-                autoPlay
-                muted
-                className="box is-paddingless has-background-grey-dark"
-                >
-            </video>
-        )
+        return (<></>)
     }
 }
 
