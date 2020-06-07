@@ -14,7 +14,8 @@ class Tabletop extends Component {
       connectedUsers: [],
       userId: params.name,
       streams: []
-    }
+    } 
+    this.seed = Math.floor(Math.random() * 100)
   }
   
   componentDidMount() {
@@ -57,8 +58,6 @@ class Tabletop extends Component {
         )
       }
     }
-
-    console.log('RENDER')
 
     return (
       <section className="hero is-fullheight has-background-light">

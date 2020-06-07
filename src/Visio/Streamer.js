@@ -5,12 +5,11 @@ class Streamer extends Component {
         super(props)
         console.log('Created local peer connection object')
         this.pc = new RTCPeerConnection()
-        this.pc.onicecandidate = (event) => this.handleOnICECandidate(event)
+        this.pc.onicecandidate = this.handleOnICECandidate;
         this.pc.oniceconnectionstatechange = this.handleICEConnectionStateChange;
 
         this.props.answerStream.subscribe({
             next: async (answer) => {
-                console.log('setRemoteDescription start')
                 await this.pc.setRemoteDescription(answer);
             }
         })
@@ -20,10 +19,9 @@ class Streamer extends Component {
         console.log(`ICE state : ${this.pc.iceConnectionState}`)
     }
 
-    handleOnICECandidate({ candidate }) {
-        console.log('handleOnICECandidate')
+    handleOnICECandidate = ({candidate}) => {
         if(candidate) {
-            // this.props.signal({ candidate })
+            this.props.signal({ candidate })
         }
     }
 
@@ -38,15 +36,9 @@ class Streamer extends Component {
                 .forEach(track => this.pc.addTrack(track, stream));
             console.log('Added local stream to Streamer')
 
-            console.log('Create offer start')
             const desc = await this.pc.createOffer()
-            console.log('Create offer end')
-
-            console.log('setLocalDescription start')
             await this.pc.setLocalDescription(desc);
-            console.log('setLocalDescription complete')
 
-            console.log('Streamer send his offer')
             this.props.signal({ desc })
 
         } catch(error) {
