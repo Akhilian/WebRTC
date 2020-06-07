@@ -4,7 +4,11 @@ class Streamer extends Component {
     constructor(props) {
         super(props)
         console.log('Created local peer connection object')
-        this.pc = new RTCPeerConnection()
+        this.pc = new RTCPeerConnection({
+            iceServers: [
+                {urls: "stun:stun.l.google.com:19302"}
+            ]
+        })
         this.pc.onicecandidate = this.handleOnICECandidate;
         this.pc.oniceconnectionstatechange = this.handleICEConnectionStateChange;
 

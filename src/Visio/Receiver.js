@@ -5,7 +5,11 @@ class Receiver extends Component {
         super(props)
         this.seed = Math.floor(Math.random() * 100)
         console.log(this.seed, 'Created local peer connection object')
-        this.pc = new RTCPeerConnection()
+        this.pc = new RTCPeerConnection({
+            iceServers: [
+                {urls: "stun:stun.l.google.com:19302"}
+            ]
+        })
         this.pc.onicecandidate = this.handleOnICECandidate
         this.pc.ontrack = this.handleOnTrack
         this.pc.oniceconnectionstatechange = this.handleICEConnectionStateChange;
