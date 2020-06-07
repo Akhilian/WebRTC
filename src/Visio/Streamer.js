@@ -1,13 +1,12 @@
 import React, { Component } from "react";
+import { STUN_ICE_SERVERS } from '../config';
 
 class Streamer extends Component {
     constructor(props) {
         super(props)
         console.log('Created local peer connection object')
         this.pc = new RTCPeerConnection({
-            iceServers: [
-                {urls: "stun:stun.l.google.com:19302"}
-            ]
+            iceServers: STUN_ICE_SERVERS
         })
         this.pc.onicecandidate = this.handleOnICECandidate;
         this.pc.oniceconnectionstatechange = this.handleICEConnectionStateChange;

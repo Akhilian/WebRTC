@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { STUN_ICE_SERVERS } from '../config';
 
 class Receiver extends Component {
     constructor(props) {
@@ -6,9 +7,7 @@ class Receiver extends Component {
         this.seed = Math.floor(Math.random() * 100)
         console.log(this.seed, 'Created local peer connection object')
         this.pc = new RTCPeerConnection({
-            iceServers: [
-                {urls: "stun:stun.l.google.com:19302"}
-            ]
+            iceServers: STUN_ICE_SERVERS
         })
         this.pc.onicecandidate = this.handleOnICECandidate
         this.pc.ontrack = this.handleOnTrack
